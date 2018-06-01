@@ -25,13 +25,28 @@ arrowsElementNode.innerHTML = `
   <button class="arrows__btn" id="next">-></button>
 `;
 
+const SCREEN_ARRAY = [
+  `.main--welcome`,
+  `.main--level-genre`,
+  `.main--level-artist`,
+  `.main--success`,
+  `.main--error`,
+  `.main--error-game-over`
+];
+
 const startScreen = `main--welcome`;
 const template = document.querySelector(`#templates`).content;
-const screenElements = [...template.querySelectorAll(`.main`)];
+const screenElements = SCREEN_ARRAY.map((currentValue) => {
+  return template.querySelector(currentValue);
+});
 const appElement = document.querySelector(`.app`);
+const mainElement = appElement.querySelector(`.main`);
 const startScreenIndex = screenElements.findIndex((screenElement) => screenElement.classList.contains(startScreen));
 const maxArrayLength = screenElements.length;
+const nextArrow = arrowsElementNode.querySelector(`#next`);
+const previousArrow = arrowsElementNode.querySelector(`#previous`);
 let currentIndex = startScreenIndex;
+
 
 const showScreen = (index) => {
 
@@ -40,9 +55,9 @@ const showScreen = (index) => {
   }
 
   const stepContent = screenElements[index];
-  appElement.innerHTML = ``;
-  appElement.appendChild(stepContent);
-  appElement.insertAdjacentElement(`beforeend`, arrowsElementNode);
+  mainElement.innerHTML = ``;
+  mainElement.appendChild(stepContent.cloneNode(true));
+  appElement.appendChild(arrowsElementNode);
 };
 
 const turn = (isLeft = true) => {
@@ -63,14 +78,9 @@ const onKeyDown = (evt) => {
   if (evt.keyCode === KeyCode.LEFT) {
     turn(true);
   }
-
-  return;
 };
 
 const onClick = (evt) => {
-  const nextArrow = document.getElementById(`next`);
-  const previousArrow = document.getElementById(`previous`);
-
   if (evt.target === nextArrow) {
     turn(false);
   }
@@ -78,8 +88,6 @@ const onClick = (evt) => {
   if (evt.target === previousArrow) {
     turn(true);
   }
-
-  return;
 };
 
 document.addEventListener(`keydown`, onKeyDown);
