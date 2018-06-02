@@ -1,13 +1,10 @@
-'use strict';
-
 const KeyCode = {
   LEFT: 37,
   RIGHT: 39,
 };
 
-const arrowsElementNode = document.createElement(`div`);
-arrowsElementNode.className = `arrows__wrap`;
-arrowsElementNode.innerHTML = `
+const arrowsElementNode = `
+<div class="arrows__wrap">
   <style>
     .arrows__wrap {
       position: absolute;
@@ -23,6 +20,7 @@ arrowsElementNode.innerHTML = `
   </style>
   <button class="arrows__btn" id="previous"><-</button>
   <button class="arrows__btn" id="next">-></button>
+  </div>
 `;
 
 const SCREEN_ARRAY = [
@@ -40,11 +38,12 @@ const screenElements = SCREEN_ARRAY.map((currentValue) => {
   return template.querySelector(currentValue);
 });
 const appElement = document.querySelector(`.app`);
+appElement.insertAdjacentHTML(`beforeend`, arrowsElementNode);
 const mainElement = appElement.querySelector(`.main`);
 const startScreenIndex = screenElements.findIndex((screenElement) => screenElement.classList.contains(startScreen));
 const maxArrayLength = screenElements.length;
-const nextArrow = arrowsElementNode.querySelector(`#next`);
-const previousArrow = arrowsElementNode.querySelector(`#previous`);
+const nextArrow = appElement.querySelector(`#next`);
+const previousArrow = appElement.querySelector(`#previous`);
 let currentIndex = startScreenIndex;
 
 
@@ -57,7 +56,6 @@ const showScreen = (index) => {
   const stepContent = screenElements[index];
   mainElement.innerHTML = ``;
   mainElement.appendChild(stepContent.cloneNode(true));
-  appElement.appendChild(arrowsElementNode);
 };
 
 const turn = (isLeft = true) => {
@@ -70,27 +68,17 @@ const turn = (isLeft = true) => {
   showScreen(currentIndex);
 };
 
-const onKeyDown = (evt) => {
-  if (evt.keyCode === KeyCode.RIGHT) {
+const onEventHandler = (evt) => {
+  if (evt.keyCode === KeyCode.RIGHT || evt.target === nextArrow) {
     turn(false);
   }
 
-  if (evt.keyCode === KeyCode.LEFT) {
+  if (evt.keyCode === KeyCode.LEFT || evt.target === previousArrow) {
     turn(true);
   }
 };
 
-const onClick = (evt) => {
-  if (evt.target === nextArrow) {
-    turn(false);
-  }
-
-  if (evt.target === previousArrow) {
-    turn(true);
-  }
-};
-
-document.addEventListener(`keydown`, onKeyDown);
-document.addEventListener(`click`, onClick);
+document.addEventListener(`keydown`, onEventHandler);
+document.addEventListener(`click`, onEventHandler);
 
 showScreen(currentIndex);
