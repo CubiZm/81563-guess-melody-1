@@ -95,6 +95,25 @@ const template = createTemplate(`
 
 const playAgainImg = template.querySelector(`.play-again`);
 const buttonElement = template.querySelector(`.genre-answer-send`);
+const formElement = template.querySelector(`.genre`);
+const checkboxElements = [...template.querySelectorAll(`[type="checkbox"]`)];
+
+const setButtonDisabled = () => {
+  let isFormCorrect = checkboxElements.some((checkbox) => checkbox.checked);
+
+  buttonElement.disabled = !isFormCorrect;
+};
+
+const formChangeHandler = () => {
+  setButtonDisabled();
+};
+
+const clearForm = () => {
+  checkboxElements.forEach((checkboxes) => {
+    checkboxes.checked = false;
+  });
+  setButtonDisabled();
+};
 
 const isScreenHandler = () => {
   showScreen(startScreen);
@@ -112,5 +131,9 @@ const showScreenHandler = () => {
 
 playAgainImg.addEventListener(`click`, isScreenHandler);
 buttonElement.addEventListener(`click`, showScreenHandler);
+formElement.addEventListener(`change`, formChangeHandler);
+formElement.addEventListener(`submit`, clearForm);
+
+setButtonDisabled();
 
 export default template;
