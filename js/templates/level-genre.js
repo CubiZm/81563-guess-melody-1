@@ -108,7 +108,8 @@ const formChangeHandler = () => {
   setButtonDisabled();
 };
 
-const clearForm = () => {
+const clearForm = (evt) => {
+  evt.preventDefault();
   checkboxElements.forEach((checkboxes) => {
     checkboxes.checked = false;
   });
