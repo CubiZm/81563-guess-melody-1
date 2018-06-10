@@ -1,5 +1,5 @@
 import {assert} from "chai";
-import {showResult} from "./show-result";
+import {showResult} from "./show-results";
 
 const testStatistics = [6, 4, 12, 8];
 
