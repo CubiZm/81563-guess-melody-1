@@ -1,3 +1,5 @@
+import {GAME_SETTINGS} from "../data/game-settings";
+
 export const showResult = (scores, gameResult) => {
   if (gameResult.timeLeft === 0) {
     return `Время вышло! Вы не успели отгадать все мелодии`;
@@ -13,4 +15,16 @@ export const showResult = (scores, gameResult) => {
   const rate = Math.round(((players - place) / players) * 100);
 
   return `Вы заняли ${place} место из ${players} игроков. Это лучше, чем у ${rate}% игроков`;
+};
+
+const getResult = (state) => {
+  if (state.timeLeft === 0) {
+    return `timeup`;
+  }
+
+  if (state.mistakes > GAME_SETTINGS.maxMistakes) {
+    return `lose`;
+  }
+
+  return `win`;
 };

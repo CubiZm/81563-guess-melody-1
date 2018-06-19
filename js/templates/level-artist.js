@@ -2,6 +2,11 @@ import createTemplate from '../create-template';
 import showScreen from '../show-screen';
 import levelGenre from '../templates/level-genre';
 import startScreen from "./welcome-screen";
+import {GAME_SETTINGS} from "../data/game-settings";
+import player from "./player";
+import {musicData} from "../data/music-data";
+
+const timeMinutes = Math.round((GAME_SETTINGS.totalTime / (1000 * 60)));
 
 const template = createTemplate(`
   <section class="main main--level main--level-artist">
@@ -15,27 +20,18 @@ const template = createTemplate(`
         style="filter: url(.#blur); transform: rotate(-90deg) scaleY(-1); transform-origin: center"></circle>
 
       <div class="timer-value" xmlns="http://www.w3.org/1999/xhtml">
-        <span class="timer-value-mins">05</span><!--
+        <span class="timer-value-mins">${timeMinutes}</span><!--
         --><span class="timer-value-dots">:</span><!--
         --><span class="timer-value-secs">00</span>
       </div>
     </svg>
     <div class="main-mistakes">
-      <img class="main-mistake" src="img/wrong-answer.png" width="35" height="49">
-      <img class="main-mistake" src="img/wrong-answer.png" width="35" height="49">
+      ${new Array(state.mistakes).fill(`<img class="main-mistake" src="img/wrong-answer.png" width="35" height="49">`).join(``)}
     </div>
 
     <div class="main-wrap">
       <h2 class="title main-title">Кто исполняет эту песню?</h2>
-      <div class="player-wrapper">
-        <div class="player">
-          <audio></audio>
-          <button class="player-control player-control--pause"></button>
-          <div class="player-track">
-            <span class="player-status"></span>
-          </div>
-        </div>
-      </div>
+      ${player(musicData[2].src)}
       <form class="main-list">
         <div class="main-answer-wrapper">
           <input class="main-answer-r" type="radio" id="answer-1" name="answer" value="val-1"/>
