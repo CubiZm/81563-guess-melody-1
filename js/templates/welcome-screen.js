@@ -1,12 +1,12 @@
 import {GAME_SETTINGS} from "../data/game-settings";
-
+import {startGame} from "../data/game";
 import createTemplate from '../create-template';
-import showScreen from '../show-screen';
-import levelArtist from '../templates/level-artist';
+// import showScreen from '../show-screen';
+// import levelArtist from '../templates/level-artist';
 
 const timeMinutes = Math.round((GAME_SETTINGS.totalTime / (1000 * 60)));
 
-const template = createTemplate(`
+const welcomeScreenTemplate = `
   <section class="main main--welcome">
     <section class="logo" title="Угадай мелодию">
       <h1>Угадай мелодию</h1>
@@ -19,13 +19,10 @@ const template = createTemplate(`
       Удачи!
     </p>
   </section>`
-);
+;
 
-const isScreenHandler = () => {
-  showScreen(levelArtist);
-};
+const welcomeScreen = createTemplate(welcomeScreenTemplate);
+const buttonElement = welcomeScreen.querySelector(`.main-play`);
+buttonElement.addEventListener(`click`, startGame);
 
-const buttonElement = template.querySelector(`.main-play`);
-buttonElement.addEventListener(`click`, isScreenHandler);
-
-export default template;
+export default welcomeScreen;

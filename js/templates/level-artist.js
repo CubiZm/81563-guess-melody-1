@@ -5,80 +5,44 @@ import startScreen from "./welcome-screen";
 import {GAME_SETTINGS} from "../data/game-settings";
 import player from "./player";
 import {musicData} from "../data/music-data";
+import header from "./header";
 
 const timeMinutes = Math.round((GAME_SETTINGS.totalTime / (1000 * 60)));
 
-const template = createTemplate(`
+const screenArtist = (question, callback) => {
+  const template = `
   <section class="main main--level main--level-artist">
-    <a class="play-again play-again__wrap" href="">
-      <img class="play-again__img" src="/img/melody-logo-ginger.png" alt="logo" width="177" height="76">
-    </a>
-    <svg xmlns="http://www.w3.org/2000/svg" class="timer" viewBox="0 0 780 780">
-      <circle
-        cx="390" cy="390" r="370"
-        class="timer-line"
-        style="filter: url(.#blur); transform: rotate(-90deg) scaleY(-1); transform-origin: center"></circle>
-
-      <div class="timer-value" xmlns="http://www.w3.org/1999/xhtml">
-        <span class="timer-value-mins">${timeMinutes}</span><!--
-        --><span class="timer-value-dots">:</span><!--
-        --><span class="timer-value-secs">00</span>
-      </div>
-    </svg>
-    <div class="main-mistakes">
-      ${new Array(state.mistakes).fill(`<img class="main-mistake" src="img/wrong-answer.png" width="35" height="49">`).join(``)}
-    </div>
-
     <div class="main-wrap">
-      <h2 class="title main-title">Кто исполняет эту песню?</h2>
-      ${player(musicData[2].src)}
+      <h2 class="title main-title">${question.title}</h2>
+      ${player(question.trackSrc)}
       <form class="main-list">
+        ${[...Object.entries(question.answers)].map(([answerValue, answerData], index) => `
         <div class="main-answer-wrapper">
-          <input class="main-answer-r" type="radio" id="answer-1" name="answer" value="val-1"/>
-          <label class="main-answer" for="answer-1">
-            <img class="main-answer-preview" src="http://placehold.it/134x134"
-                 alt="Пелагея" width="134" height="134">
-            Пелагея
+          <input class="main-answer-r" type="radio" id="answer-${index + 1}" name="answer" value="${answerValue}"/>
+          <label class="main-answer" for="answer-${index + 1}">
+            <img class="main-answer-preview" src="${answerData.track.image}"
+                 alt="${answerData.track.name}" width="134" height="134">
+            ${answerData.track.name}
           </label>
-        </div>
-
-        <div class="main-answer-wrapper">
-          <input class="main-answer-r" type="radio" id="answer-2" name="answer" value="val-2"/>
-          <label class="main-answer" for="answer-2">
-            <img class="main-answer-preview" src="http://placehold.it/134x134"
-                 alt="Краснознаменная дивизия имени моей бабушки" width="134" height="134">
-            Краснознаменная дивизия имени моей бабушки
-          </label>
-        </div>
-
-        <div class="main-answer-wrapper">
-          <input class="main-answer-r" type="radio" id="answer-3" name="answer" value="val-3"/>
-          <label class="main-answer" for="answer-3">
-            <img class="main-answer-preview" src="http://placehold.it/134x134"
-                 alt="Lorde" width="134" height="134">
-            Lorde
-          </label>
-        </div>
+        </div>`).join(``)}
       </form>
     </div>
   </section>
-`);
+  `;
 
+  const screenArtistElement = createTemplate(template);
 
-const showScreenHandler = ({target}) => {
-  if (target.classList.contains(`main-answer-r`)) {
-    showScreen(levelGenre);
-  }
+  const artistForm = screenArtistElement.querySelector(`form.main-list`);
+  const artistAnswers = Array.from(artistForm.querySelectorAll(`input[name="answer"]`));
+
+  artistAnswers.forEach((answer) => {
+    answer.addEventListener(`change`, () => {
+      const checkedAnswers = artistAnswers.filter((input) => input.checked).map((input) => input.value);
+      callback(checkedAnswers);
+    });
+  });
+
+  return screenArtistElement;
 };
 
-const showStartScreen = () => {
-  showScreen(startScreen);
-};
-
-const playAgainBtn = template.querySelector(`.play-again`);
-playAgainBtn.addEventListener(`click`, showStartScreen);
-
-const buttonElement = template.querySelector(`.main-list`);
-buttonElement.addEventListener(`click`, showScreenHandler);
-
-export default template;
+export default screenArtist;
