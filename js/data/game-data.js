@@ -1,4 +1,4 @@
-import musicData from './music-data';
+import {musicData} from './music-data';
 
 export const gameQuestions = [
   {

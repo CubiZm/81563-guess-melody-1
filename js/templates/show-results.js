@@ -1,18 +1,22 @@
-import GAME_SETTINGS from "../data/game-settings";
-import statistics from "../data/game-data";
+import {GAME_SETTINGS} from "../data/game-settings";
+import {statistics} from "../data/statistics";
 import {calculatePoints} from "./calculate-points";
 
-const time = Math.round((GAME_SETTINGS.totalTime / (1000 * 60)));
+const time = (ms) => {
+  const minutes = Math.floor(ms / 60000);
+  const seconds = ((ms % 60000) / 1000).toFixed(0);
+  return {minutes, seconds};
+};
 
 const getResult = (state) => {
   if (state.timeLeft === 0) {
     return `timeup`;
   }
-  
+
   if (state.mistakes > GAME_SETTINGS.maxMistakes) {
     return `lose`;
   }
-  
+
   return `win`;
 };
 
@@ -41,7 +45,7 @@ const resultTemplate = (game) => {
 export const showResult = (gameState) => {
   const userPoints = calculatePoints(gameState);
   const updatedStatistics = statistics.concat(userPoints).sort((a, b) => b - a);
-  
+
   let gameResult = {
     time: time(GAME_SETTINGS.totalTime - gameState.timeLeft),
     points: userPoints,
@@ -53,6 +57,6 @@ export const showResult = (gameState) => {
       return Math.round(((this.players - this.place) / this.players) * 100);
     }
   };
-  
+
   return resultTemplate(gameResult)[getResult(gameState)];
 };

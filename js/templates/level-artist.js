@@ -1,13 +1,5 @@
 import createTemplate from '../create-template';
-import showScreen from '../show-screen';
-import levelGenre from '../templates/level-genre';
-import startScreen from "./welcome-screen";
-import {GAME_SETTINGS} from "../data/game-settings";
 import player from "./player";
-import {musicData} from "../data/music-data";
-import header from "./header";
-
-const timeMinutes = Math.round((GAME_SETTINGS.totalTime / (1000 * 60)));
 
 const screenArtist = (question, callback) => {
   const template = `

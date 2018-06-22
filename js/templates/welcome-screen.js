@@ -1,8 +1,6 @@
 import {GAME_SETTINGS} from "../data/game-settings";
 import {startGame} from "../data/game";
 import createTemplate from '../create-template';
-// import showScreen from '../show-screen';
-// import levelArtist from '../templates/level-artist';
 
 const timeMinutes = Math.round((GAME_SETTINGS.totalTime / (1000 * 60)));
 

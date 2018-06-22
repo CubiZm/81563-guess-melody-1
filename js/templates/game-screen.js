@@ -1,11 +1,11 @@
 import showScreen from "../show-screen";
 import {checkAnswers} from "../data/game";
-import GAME_SETTINGS from "../data/game-settings";
-import gameQuestions from "../data/game-data";
+import {GAME_SETTINGS} from "../data/game-settings";
+import {gameQuestions} from "../data/game-data";
 import screenArtist from "./level-artist";
 import screenGenre from "./level-genre";
 import gameHeader from "./header";
-import resultScreen from "./show-results";
+import resultScreen from "./result-screen";
 
 const gameScreen = (gameState) => {
   const question = gameQuestions[gameState.level];

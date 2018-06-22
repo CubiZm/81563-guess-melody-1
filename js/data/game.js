@@ -1,5 +1,5 @@
-import {GAME_SETTINGS} from "./game-data";
-import {showScreen} from "../show-screen";
+import {GAME_SETTINGS} from "./game-settings";
+import showScreen from "../show-screen";
 import gameScreen from "../templates/game-screen";
 
 export const INITIAL_STATE = Object.freeze({

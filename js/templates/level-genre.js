@@ -1,9 +1,5 @@
-import createTemplate from '../create-template';
-import showScreen from '../show-screen';
-//import startScreen from '../templates/welcome-screen';
-
-import screenSuccess from '../templates/screen-success';
-import screenGameOver from '../templates/live-over';
+import player from "./player";
+import createTemplate from "../create-template";
 
 const screenGenre = (question, callback) => {
   const template = `
@@ -22,45 +18,30 @@ const screenGenre = (question, callback) => {
     </div>
   </section>
   `;
-  
-  const screenGenreElement = showScreen(template);
-  const formElement = template.querySelector(`form.genre`);
-  const checkboxElements = [...template.querySelectorAll(`[type="checkbox"]`)];
+
+  const screenGenreElement = createTemplate(template);
+  const formElement = screenGenreElement.querySelector(`form.genre`);
+  const checkboxElements = [...screenGenreElement.querySelectorAll(`[type="checkbox"]`)];
   const buttonElement = formElement.querySelector(`.genre-answer-send`);
 
-  const setButtonDisabled = () => {
+  const onAnswerChange = () => {
     let isFormCorrect = checkboxElements.some((checkbox) => checkbox.checked);
-  
     buttonElement.disabled = !isFormCorrect;
   };
-  
-  const formChangeHandler = () => {
-    setButtonDisabled();
-  };
-  
-  const clearForm = () => {
-    checkboxElements.forEach((checkboxes) => {
-      checkboxes.checked = false;
-    });
-    setButtonDisabled();
-  };
-  
-  // const doRandomResult = () => {
-  //   let random = Math.floor(Math.random() * 2);
-  //   const result = random < 1 ? screenSuccess : screenGameOver;
-  //   showScreen(result);
-  // };
-  
-  // const showScreenHandler = () => {
-  //   doRandomResult();
-  // };
-  
-  // buttonElement.addEventListener(`click`, showScreenHandler);
-  formElement.addEventListener(`change`, formChangeHandler);
-  formElement.addEventListener(`submit`, clearForm);
-  
-  setButtonDisabled();
-  
+
+  buttonElement.disabled = true;
+
+  checkboxElements.forEach((answer) => {
+    answer.addEventListener(`change`, onAnswerChange);
+  });
+
+  buttonElement.addEventListener(`click`, () => {
+    const checkedAnswers = checkboxElements.filter((input) => input.checked).map((input) => input.value);
+    callback(checkedAnswers);
+  });
+
+  buttonElement.addEventListener(`click`, onAnswerChange);
+
   return screenGenreElement;
 };
 
