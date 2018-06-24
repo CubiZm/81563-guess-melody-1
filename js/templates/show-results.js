@@ -8,18 +8,6 @@ const time = (ms) => {
   return {minutes, seconds};
 };
 
-const getResult = (state) => {
-  if (state.timeLeft === 0) {
-    return `timeup`;
-  }
-
-  if (state.mistakes > GAME_SETTINGS.maxMistakes) {
-    return `lose`;
-  }
-
-  return `win`;
-};
-
 const resultTemplate = (game) => {
   return {
     timeup: {

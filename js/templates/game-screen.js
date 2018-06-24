@@ -2,20 +2,30 @@ import showScreen from "../show-screen";
 import {checkAnswers} from "../data/game";
 import {GAME_SETTINGS} from "../data/game-settings";
 import {gameQuestions} from "../data/game-data";
-import screenArtist from "./level-artist";
-import screenGenre from "./level-genre";
-import gameHeader from "./header";
-import resultScreen from "./result-screen";
+import Artist from "../views/Artist";
+import Genre from "../views/Genre";
+import Header from "../views/Header";
+import Mistakes from "../views/Mistakes";
+//import resultScreen from "./result-screen";
 
 const gameScreen = (gameState) => {
   const question = gameQuestions[gameState.level];
 
   const questionScreenMap = {
-    guessArtist: screenArtist,
-    chooseGenre: screenGenre
+    guessArtist: Artist,
+    chooseGenre: Genre
   };
 
-  const onAnswerSend = (userAnswers) => {
+  const screen = new questionScreenMap[question.type](question);
+  const wrapper = screen.element.querySelector(`.main-wrap`);
+
+  const header = new Header();
+  const mistakes = new Mistakes(gameState.mistakes);
+
+  screen.element.insertBefore(header.element, wrapper);
+  screen.element.insertBefore(mistakes.element, wrapper);
+
+  screen.onAnswerSend = (userAnswers) => {
     event.preventDefault();
 
     const isCorrect = checkAnswers(question, userAnswers);
@@ -33,44 +43,27 @@ const gameScreen = (gameState) => {
     });
 
     if ((gameState.mistakes > GAME_SETTINGS.maxMistakes) || (gameState.timeLeft === 0) || ((gameState.level + 1) === GAME_SETTINGS.totalQuestions)) {
-      showScreen(resultScreen(gameState));
+      //showScreen(resultScreen(gameState));
     } else {
       gameState.level++;
       showScreen(gameScreen(gameState));
     }
   };
 
-  const gameScreenElement = questionScreenMap[question.type](question, onAnswerSend);
-  gameScreenElement.insertAdjacentElement(`afterbegin`, gameHeader(gameState));
-
-  const allPlayers = Array.from(gameScreenElement.querySelectorAll(`.player`));
-
   const pauseTrack = (player) => {
     player.querySelector(`audio`).pause();
     player.querySelector(`.player-control`).classList.replace(`player-control--pause`, `player-control--play`);
   };
 
-  const playTrack = (player) => {
+  const playTrack = (player, otherPlayers) => {
     player.querySelector(`audio`).play();
     player.querySelector(`.player-control`).classList.replace(`player-control--play`, `player-control--pause`);
   };
 
-  allPlayers.forEach((player) => {
-    player.addEventListener(`click`, (evt) => {
-      evt.preventDefault();
-      const selectedTrack = player.querySelector(`audio`);
-      let isPlaying = (selectedTrack.duration > 0 && !selectedTrack.paused);
+  screen.onPauseTrack = (player) => pauseTrack(player);
+  screen.onPlayTrack = (player, otherPlayers) => playTrack(player, otherPlayers);
 
-      if (isPlaying) {
-        pauseTrack(player);
-      } else {
-        allPlayers.forEach((plr) => pauseTrack(plr));
-        playTrack(player);
-      }
-    });
-  });
-
-  return gameScreenElement;
+  return screen.element;
 };
 
 export default gameScreen;

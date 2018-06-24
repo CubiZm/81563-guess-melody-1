@@ -3,6 +3,7 @@ import {musicData} from './music-data';
 export const gameQuestions = [
   {
     type: `guessArtist`,
+    title: `Kevin MacLeod`,
     trackSrc: musicData[0].src,
     answers: {
       'answer-1': {track: musicData[0], correct: true},
@@ -12,6 +13,7 @@ export const gameQuestions = [
   },
   {
     type: `guessArtist`,
+    title: `Jingle Punks`,
     trackSrc: musicData[1].src,
     answers: {
       'answer-1': {track: musicData[1], correct: true},
@@ -21,6 +23,7 @@ export const gameQuestions = [
   },
   {
     type: `guessArtist`,
+    title: `Audionautix`,
     trackSrc: musicData[2].src,
     answers: {
       'answer-1': {track: musicData[2], correct: true},
@@ -30,6 +33,7 @@ export const gameQuestions = [
   },
   {
     type: `guessArtist`,
+    title: `Riot`,
     trackSrc: musicData[3].src,
     answers: {
       'answer-1': {track: musicData[3], correct: true},
@@ -39,6 +43,7 @@ export const gameQuestions = [
   },
   {
     type: `guessArtist`,
+    title: `Jingle Punks`,
     trackSrc: musicData[4].src,
     answers: {
       'answer-1': {track: musicData[4], correct: true},
@@ -48,6 +53,7 @@ export const gameQuestions = [
   },
   {
     type: `guessArtist`,
+    title: `Gunnar Olsen`,
     trackSrc: musicData[5].src,
     answers: {
       'answer-1': {track: musicData[5], correct: true},

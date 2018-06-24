@@ -1,8 +1,6 @@
-const appElement = document.querySelector(`section.main`);
-
-const showScreen = (template) => {
-  appElement.innerHTML = ``;
-  appElement.appendChild(template);
+const showScreen = (screen) => {
+  const currentScreen = document.querySelector(`section.main`);
+  document.querySelector(`div.app`).replaceChild(screen, currentScreen);
 };
 
 export default showScreen;

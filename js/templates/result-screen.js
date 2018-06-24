@@ -1,22 +1,12 @@
-import buttonReplay from "./button-replay";
-import {showResult} from "./show-results";
-import createTemplate from "../create-template";
+import Result from "../views/Result";
+import Replay from "../views/ReplayButton";
 
-const resultScreen = (gameState) => {
-  const resultScreenTemplate = `
-  <section class="main main--result">
-    <section class="logo" title="Угадай мелодию"><h1>Угадай мелодию</h1></section>
-
-    <h2 class="title">${showResult(gameState).title}</h2>
-    <div class="main-stat">${showResult(gameState).description}</div>
-    <span class="main-comparison">${showResult(gameState).comparison}</span>
-  </section>
-  `;
-
-  const resultScreenElement = createTemplate(resultScreenTemplate);
-  resultScreenElement.appendChild(buttonReplay);
-
-  return resultScreenElement;
+const resultScreen = () => {
+  const screen = new Result(getResult(gameState, gameOutput), gameOutput);
+  const replay = new Replay((gameOutput === `win` ? `Сыграть` : `Попробовать`) + ` ещё раз`);
+  replay.onReplayButtonClick = () => startGame();
+  screen.element.appendChild(replay.element);
+  
+  return screen.element;
 };
 
-export default resultScreen;
